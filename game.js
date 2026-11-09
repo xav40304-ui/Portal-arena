@@ -1,8 +1,16 @@
 import * as THREE from 'three';
 import { joinRoom } from 'trystero';
 
-const config = { appId: 'portal-sniper-arena-v2' };
+// Safe Trystero setup block with fallback protection
 let room, sendMove, getMove, sendPortal, getPortal;
+try {
+    const config = { appId: 'portal-sniper-arena-v3' };
+    room = joinRoom(config, 'global-arena');
+    [sendMove, getMove] = room.makeAction('move');
+    [sendPortal, getPortal] = room.makeAction('portal');
+} catch(e) {
+    console.log("Multiplayer network offline or sandbox layout active:", e);
+}
 
 let scene, camera, renderer, floor;
 let player, players = {};
@@ -11,16 +19,9 @@ let currentWeapon = 'AR';
 let portals = { blue: null, orange: null };
 let gameStarted = false;
 
-// Wait for user gesture initialization to bypass iPad autoplay blocks
 document.getElementById('btn-start').addEventListener('click', () => {
     document.getElementById('start-overlay').style.display = 'none';
     document.getElementById('hud').style.display = 'flex';
-    
-    // Connect network room instantly on player gesture
-    room = joinRoom(config, 'global-arena');
-    [sendMove, getMove] = room.makeAction('move');
-    [sendPortal, getPortal] = room.makeAction('portal');
-    
     gameStarted = true;
     init();
 });
@@ -64,12 +65,12 @@ function createArena() {
     const boxMat = new THREE.MeshLambertMaterial({ color: 0x718093 });
     
     const positions = [
-        [-20, 5, -20], [25, 5, -25], [-25, 5, 25], [0, 5, -30], [20, 5, 20]
+        [-20, 5, -20], [25, 5, -25], [-25, 5, 25], [0, 5, -30],
     ];
 
     positions.forEach(pos => {
         const block = new THREE.Mesh(boxGeo, boxMat);
-        block.position.set(pos[0], pos[1], pos[2]);
+        block.position.set(pos, pos, pos);
         scene.add(block);
     });
 }
@@ -158,7 +159,7 @@ function fireWeapon() {
     raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
     if (intersects.length > 0) {
-         // Firing logs safely register inside background logs
+         console.log("Struck target:", intersects[0].object.name);
     }
 }
 
@@ -191,6 +192,7 @@ function shootPortal(type) {
 }
 
 function setupNetworking() {
+    if (!room) return;
     room.onPeerJoin(peerId => {
         const avatarGeo = new THREE.BoxGeometry(2, 3, 2);
         const avatarMat = new THREE.MeshLambertMaterial({ color: 0xff6b81 });
@@ -206,12 +208,14 @@ function setupNetworking() {
         }
     });
 
-    getMove((data, peerId) => {
-        if (players[peerId]) {
-            players[peerId].position.fromArray(data.pos);
-            players[peerId].rotation.fromArray(data.rot);
-        }
-    });
+    if (getMove) {
+        getMove((data, peerId) => {
+            if (players[peerId]) {
+                players[peerId].position.fromArray(data.pos);
+                players[peerId].rotation.fromArray(data.rot);
+            }
+        });
+    }
 }
 
 function animate() {
