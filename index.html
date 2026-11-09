@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Portal Sniper Arena</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com",
+          "trystero": "https://unpkg.com"
+        }
+      }
+    </script>
+</head>
+<body>
+    <div id="start-overlay">
+        <button id="btn-start">TAP TO START & JOIN LOBBY</button>
+    </div>
+
+    <div id="hud">
+        <div id="joystick-zone">
+            <div id="joystick-knob"></div>
+        </div>
+        
+        <div id="action-buttons">
+            <button id="btn-fire" class="hud-btn">FIRE</button>
+            <button id="btn-swap" class="hud-btn">WEAPON</button>
+            <div class="portal-row">
+                <button id="btn-portalA" class="hud-btn portal-a">BLUE PORTAL</button>
+                <button id="btn-portalB" class="hud-btn portal-b">ORANGE PORTAL</button>
+            </div>
+        </div>
+        <div id="weapon-status">Assault Rifle</div>
+    </div>
+
+    <script type="module" src="game.js"></script>
+</body>
+</html>

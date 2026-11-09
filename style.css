@@ -1,0 +1,104 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #e0e0e0;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+canvas {
+    display: block;
+    width: 100vw;
+    height: 100vh;
+}
+#start-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.85);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#btn-start {
+    padding: 20px 40px;
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+    background: #2ed573;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 20px rgba(46,213,115,0.4);
+}
+#hud {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    display: none; /* Becomes visible after tapping start */
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 40px;
+    z-index: 10;
+}
+#joystick-zone {
+    width: 160px;
+    height: 160px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+#joystick-knob {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    position: absolute;
+    transition: transform 0.05s linear;
+}
+#action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    pointer-events: auto;
+}
+.hud-btn {
+    width: 150px;
+    height: 65px;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+#btn-fire { height: 85px; background: #ff4757; font-size: 22px; }
+.portal-row { display: flex; gap: 10px; }
+.portal-a { background: #1e90ff; border: 2px solid #fff;}
+.portal-b { background: #ffa500; border: 2px solid #fff;}
+#weapon-status {
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #111;
+    font-weight: bold;
+    font-size: 22px;
+    background: rgba(255,255,255,0.8);
+    padding: 8px 24px;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
